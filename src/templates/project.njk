@@ -51,11 +51,11 @@ bodyClass: project-page
 
     <nav class="next-project">
       <span class="label">Siguiente proyecto</span>
-      <a href="/project/{{ nextProject.slug }}/" class="next-link">
+      <a href="{{ ('/project/' + nextProject.slug + '/') | url }}" class="next-link">
         {{ nextProject.title }}
       </a>
     </nav>
   </div>
 </article>
 
-<script src="/assets/js/video-background.js"></script>
+<script src="{{ '/assets/js/video-background.js' | url }}"></script>

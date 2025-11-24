@@ -5,6 +5,10 @@ module.exports = function(eleventyConfig) {
   // Watch for changes
   eleventyConfig.addWatchTarget("src/assets/");
 
+  // Use pathPrefix only when deploying to GitHub Pages subdirectory
+  // When custom domain is configured, this will be empty
+  const pathPrefix = process.env.ELEVENTY_PATH_PREFIX || "";
+
   return {
     dir: {
       input: "src/templates",
@@ -14,6 +18,7 @@ module.exports = function(eleventyConfig) {
     },
     templateFormats: ["njk", "html", "md"],
     htmlTemplateEngine: "njk",
-    markdownTemplateEngine: "njk"
+    markdownTemplateEngine: "njk",
+    pathPrefix: pathPrefix
   };
 };
