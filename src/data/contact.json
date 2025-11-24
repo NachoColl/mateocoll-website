@@ -1,0 +1,22 @@
+{
+  "hero": {
+    "title": "Contacto",
+    "subtitle": "Estoy disponible para proyectos de edición, colaboraciones estudiantiles o consultas"
+  },
+  "email": "mateo.coll@email.com",
+  "phone": "+34 612 345 678",
+  "address": "Barcelona, España",
+  "social": [
+    { "platform": "Instagram", "url": "https://instagram.com/mateocoll", "icon": "instagram" },
+    { "platform": "Vimeo", "url": "https://vimeo.com/mateocoll", "icon": "vimeo" },
+    { "platform": "LinkedIn", "url": "https://linkedin.com/in/mateocoll", "icon": "linkedin" }
+  ],
+  "form": {
+    "topics": [
+      "Proyecto de edición",
+      "Colaboración",
+      "Consulta general"
+    ],
+    "formspreeId": "xpwzgkqr"
+  }
+}

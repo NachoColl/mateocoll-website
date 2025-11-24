@@ -1,0 +1,61 @@
+---
+layout: base.njk
+pagination:
+  data: projects.projects
+  size: 1
+  alias: project
+permalink: /project/{{ project.slug }}/
+bodyClass: project-page
+---
+
+<section class="project-hero">
+  {% if project.vimeoId %}
+    <iframe
+      src="https://player.vimeo.com/video/{{ project.vimeoId }}{% if project.vimeoHash %}?h={{ project.vimeoHash }}&{% else %}?{% endif %}background=1&autoplay=1&loop=1&muted=1"
+      frameborder="0"
+      allow="autoplay; fullscreen; picture-in-picture"
+      title="{{ project.title }}">
+    </iframe>
+  {% else %}
+    <video autoplay muted loop playsinline>
+      <source src="{{ project.videoUrl }}" type="video/mp4">
+    </video>
+  {% endif %}
+</section>
+
+<article class="project-content">
+  <div class="container">
+    <header class="project-header">
+      <h1 class="project-title">{{ project.title }}</h1>
+      <p class="project-description">{{ project.description }}</p>
+    </header>
+
+    <dl class="project-metadata">
+      {% for item in project.metadata %}
+      <div class="meta-item">
+        <dt>{{ item.label }}</dt>
+        <dd>{{ item.value }}</dd>
+      </div>
+      {% endfor %}
+    </dl>
+
+    {% set currentIndex = 0 %}
+    {% for p in projects.projects %}
+      {% if p.slug == project.slug %}
+        {% set currentIndex = loop.index0 %}
+      {% endif %}
+    {% endfor %}
+
+    {% set nextIndex = (currentIndex + 1) % projects.projects.length %}
+    {% set nextProject = projects.projects[nextIndex] %}
+
+    <nav class="next-project">
+      <span class="label">Siguiente proyecto</span>
+      <a href="/project/{{ nextProject.slug }}/" class="next-link">
+        {{ nextProject.title }}
+      </a>
+    </nav>
+  </div>
+</article>
+
+<script src="/assets/js/video-background.js"></script>

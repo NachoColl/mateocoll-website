@@ -1,0 +1,12 @@
+{
+  "hero": {
+    "title": "Sobre mí",
+    "subtitle": "Estudiante de cine de 19 años apasionado por el montaje cinematográfico y la narrativa visual"
+  },
+  "intro": "Creo en el poder del montaje para transformar imágenes en historias que conectan con el espectador.",
+  "images": [
+    "/assets/images/about/studio-1.svg",
+    "/assets/images/about/studio-2.svg",
+    "/assets/images/about/studio-3.svg"
+  ]
+}

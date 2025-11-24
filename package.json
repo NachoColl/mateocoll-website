@@ -1,0 +1,23 @@
+{
+  "name": "mateocoll-portfolio",
+  "version": "1.0.0",
+  "description": "Mateo Coll Creative Portfolio",
+  "scripts": {
+    "dev": "eleventy --serve --port=8080",
+    "build": "eleventy",
+    "preview": "eleventy && npx http-server _site -p 8080 -c-1",
+    "test:visual": "playwright test tests/visual/comparison.spec.ts",
+    "test:visual:update": "playwright test --update-snapshots",
+    "capture-refs": "npx ts-node tests/visual/capture-references.ts"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^24.10.1",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "sass": "^1.69.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

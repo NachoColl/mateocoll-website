@@ -1,0 +1,33 @@
+{
+  "projects": [
+    {
+      "slug": "wstf",
+      "title": "WSTF",
+      "description": "Cortometraje experimental donde exploré técnicas de montaje no lineal y ritmo visual",
+      "thumbnail": "/assets/images/projects/wstf.svg",
+      "previewVideo": "/assets/videos/previews/wstf.mp4",
+      "vimeoId": "1069473073",
+      "vimeoHash": "d4443129fe",
+      "category": "cortometrajes",
+      "metadata": [
+        { "label": "Rol", "value": "Editor" },
+        { "label": "Director", "value": "Colaboración" },
+        { "label": "Año", "value": "2024" }
+      ]
+    },
+    {
+      "slug": "duelo",
+      "title": "Duelo",
+      "description": "Proyecto de ficción centrado en la construcción de tensión dramática a través del corte",
+      "thumbnail": "/assets/images/projects/duelo.svg",
+      "previewVideo": "/assets/videos/previews/duelo.mp4",
+      "vimeoId": "1139671566",
+      "category": "cortometrajes",
+      "metadata": [
+        { "label": "Rol", "value": "Editor" },
+        { "label": "Género", "value": "Drama" },
+        { "label": "Año", "value": "2024" }
+      ]
+    }
+  ]
+}
