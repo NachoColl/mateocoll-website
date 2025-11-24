@@ -25,11 +25,11 @@ layout: base.njk
     <div class="projects-grid">
       {% for project in projects.projects %}
       <article class="project-card" data-project="{{ project.slug }}" data-category="{{ project.category }}">
-        <a href="/project/{{ project.slug }}/">
+        <a href="{{ ('/project/' + project.slug + '/') | url }}">
           <div class="media-container">
-            <img class="thumbnail" src="{{ project.thumbnail }}" alt="{{ project.title }}" loading="lazy">
+            <img class="thumbnail" src="{{ project.thumbnail | url }}" alt="{{ project.title }}" loading="lazy">
             <video class="preview-video" muted loop playsinline preload="none">
-              <source src="{{ project.previewVideo }}" type="video/mp4">
+              <source src="{{ project.previewVideo | url }}" type="video/mp4">
             </video>
           </div>
           <h3 class="project-title">{{ project.title }}</h3>
@@ -40,5 +40,5 @@ layout: base.njk
   </div>
 </section>
 
-<script src="/assets/js/category-filter.js"></script>
-<script src="/assets/js/video-preview.js"></script>
+<script src="{{ '/assets/js/category-filter.js' | url }}"></script>
+<script src="{{ '/assets/js/video-preview.js' | url }}"></script>
