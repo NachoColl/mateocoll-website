@@ -123,35 +123,16 @@ npm run worktree:merge {BRANCH_NAME} -- --update
 **Note:** The `--` separator is required to pass flags through npm to the script.
 
 **What the script does:**
-1. **Validates parent branch** (should pass since we're on correct branch)
-2. **Fetches from origin** to check if parent branch is up to date
-3. **Checks if local parent branch is behind remote** - exits with error if someone else pushed changes
-4. **Auto-commits uncommitted changes** in worktree branch (if any exist)
-5. **Merges with `--no-ff`** to preserve history
-6. **Excludes worktree-specific files** (`.env.worktree`, `docker-compose.worktree.yml`, etc.)
-7. **Preserves main branch versions** of `test/.env`, `test/package.json`, `.gitignore`
-8. **Automatically pushes to origin** (the parent branch: staging/prod/main/master)
+- Validates parent branch (should pass since we're on correct branch)
+- Merges with `--no-ff` to preserve history
+- Excludes worktree-specific files (`.env.worktree`, `docker-compose.worktree.yml`, etc.)
+- Preserves main branch versions of `test/.env`, `test/package.json`, `.gitignore`
+- **Automatically pushes to origin** (the parent branch: staging/prod/main/master)
 
 **Expected output:**
 ```
-🔄 Fetching latest changes from origin...
-✅ Fetched latest changes from origin
-ℹ️  Your local 'staging' branch is 0 commits ahead of origin/staging
 ✅ Merge completed successfully!
 ✅ Successfully pushed to origin
-```
-
-**If parent branch is behind remote:**
-```
-🔄 Fetching latest changes from origin...
-✅ Fetched latest changes from origin
-❌ Error: Your local 'staging' branch is 2 commits behind origin/staging
-   Someone else has pushed changes to the remote branch.
-
-💡 To fix this, update your local branch first:
-   git pull origin staging
-   Then run the merge again:
-   npm run worktree:merge feature-name
 ```
 
 ### 6. Monitor Deployment

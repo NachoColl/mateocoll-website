@@ -242,63 +242,42 @@ The `mateocoll-website` placeholder is automatically replaced during installatio
 
 ## Deployment
 
-### AWS Profile and Region Selection
-
-**IMPORTANT:** Always use the correct AWS CLI profile and region for your environment.
-
-**Profile Naming Pattern:** `<repo-name>-<environment>`
-
-Profile and region detection:
-```bash
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-```
-
-Examples:
-- Repository: `bws-backoffice`, Branch: `staging` → Profile: `bws-backoffice-staging`
-- Repository: `bws-api`, Branch: `prod` → Profile: `bws-api-prod`
-- Region: Defaults to `us-east-1` (can be overridden by setting `AWS_REGION` environment variable)
-
-**IMPORTANT:** All AWS CLI commands must include both `--profile $AWS_PROFILE` and `--region $AWS_REGION`.
-
 ### Manual Deployment
 
 #### Deploy Database Stack
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-# Deploy to current environment
+# Staging
 aws cloudformation deploy \
   --template-file .deploy/IaC/db/db.yml \
-  --stack-name my-app-db-${ENVIRONMENT} \
-  --parameter-overrides file://.deploy/IaC/db/configs/db-${ENVIRONMENT}.json \
-  --capabilities CAPABILITY_IAM \
-  --profile $AWS_PROFILE
+  --stack-name my-app-db-staging \
+  --parameter-overrides file://.deploy/IaC/db/configs/db-staging.json \
+  --capabilities CAPABILITY_IAM
+
+# Production
+aws cloudformation deploy \
+  --template-file .deploy/IaC/db/db.yml \
+  --stack-name my-app-db-prod \
+  --parameter-overrides file://.deploy/IaC/db/configs/db-prod.json \
+  --capabilities CAPABILITY_IAM
 ```
 
 #### Deploy Infrastructure Stack
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-# Deploy to current environment
+# Staging
 aws cloudformation deploy \
   --template-file .deploy/IaC/infra/infra.yml \
-  --stack-name my-app-infra-${ENVIRONMENT} \
-  --parameter-overrides file://.deploy/IaC/infra/configs/infra-${ENVIRONMENT}.json \
-  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND \
-  --profile $AWS_PROFILE
+  --stack-name my-app-infra-staging \
+  --parameter-overrides file://.deploy/IaC/infra/configs/infra-staging.json \
+  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+# Production
+aws cloudformation deploy \
+  --template-file .deploy/IaC/infra/infra.yml \
+  --stack-name my-app-infra-prod \
+  --parameter-overrides file://.deploy/IaC/infra/configs/infra-prod.json \
+  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
 ```
 
 ### Automated Deployment (CI/CD)
@@ -388,18 +367,7 @@ Outputs:
 4. Deploy:
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-aws cloudformation deploy \
-  --template-file .deploy/IaC/db/db.yml \
-  --stack-name my-app-db-${ENVIRONMENT} \
-  --parameter-overrides file://.deploy/IaC/db/configs/db-${ENVIRONMENT}.json \
-  --capabilities CAPABILITY_IAM \
-  --profile $AWS_PROFILE
+aws cloudformation deploy --template-file .deploy/IaC/db/db.yml ...
 ```
 
 ### Adding a Lambda Function
@@ -425,18 +393,7 @@ MyFunction:
 3. Deploy:
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-aws cloudformation deploy \
-  --template-file .deploy/IaC/infra/infra.yml \
-  --stack-name my-app-infra-${ENVIRONMENT} \
-  --parameter-overrides file://.deploy/IaC/infra/configs/infra-${ENVIRONMENT}.json \
-  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND \
-  --profile $AWS_PROFILE
+aws cloudformation deploy --template-file .deploy/IaC/infra/infra.yml ...
 ```
 
 ### Using Outputs from Other Stacks
@@ -462,18 +419,10 @@ Resources:
 Deploy with:
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
 aws cloudformation deploy \
   --template-file .deploy/IaC/infra/infra.yml \
-  --profile $AWS_PROFILE \
   --parameter-overrides UsersTableName=$(aws cloudformation describe-stacks \
-    --stack-name my-app-db-${ENVIRONMENT} \
-    --profile $AWS_PROFILE \
+    --stack-name my-app-db-staging \
     --query 'Stacks[0].Outputs[?OutputKey==`UsersTableName`].OutputValue' \
     --output text)
 ```
@@ -533,19 +482,14 @@ For read-only debugging access with Claude Code, create an IAM user with these p
 ### Usage
 
 ```bash
-# Configure AWS CLI profile for Claude Code read-only access
-# Use the same profile naming pattern: <repo-name>-<environment>
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT="staging"  # or "prod" for production
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-
-aws configure --profile $AWS_PROFILE
+# Configure AWS CLI for Claude Code
+aws configure --profile claude-code
 AWS Access Key ID: AKIA...
 AWS Secret Access Key: ...
 Default region: us-east-1
 
 # Claude Code can now read data for debugging
-aws dynamodb scan --table-name ${ENVIRONMENT}-USERS --profile $AWS_PROFILE
+aws dynamodb scan --table-name staging-USERS --profile claude-code
 ```
 
 ## See Also

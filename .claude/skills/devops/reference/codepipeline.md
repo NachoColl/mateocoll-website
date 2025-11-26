@@ -2,92 +2,77 @@
 
 **Important:** CodePipeline naming convention is `devops-<repository-name>-<branch>`.
 
-**AWS Profile and Region Selection:**
-
-Profile naming pattern: `<repo-name>-<environment>`
-
-Always detect the profile and region dynamically:
-```bash
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-```
-
-Examples:
-- Repository: `bws-backoffice`, Branch: `staging` → Profile: `bws-backoffice-staging`
-- Repository: `bws-api`, Branch: `prod` → Profile: `bws-api-prod`
-- Region: Defaults to `us-east-1` (can be overridden by setting `AWS_REGION` environment variable)
-
-**IMPORTANT:** All AWS CLI commands must include both `--profile $AWS_PROFILE` and `--region $AWS_REGION`.
+**AWS Profile Selection:**
+- Use `--profile staging` when monitoring staging pipeline (staging branch)
+- Use `--profile prod` when monitoring production pipeline (prod branch)
+- **Default:** If no environment is specified, use `--profile staging`
 
 ### Step 1: Discover Pipeline
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
 # List all pipelines for this project
-aws codepipeline list-pipelines \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION | \
-  grep "devops-${REPO_NAME}"
+# Use --profile staging by default, or --profile prod if checking production
+aws codepipeline list-pipelines --profile staging --region us-east-1 | \
+  grep "devops-mateocoll-website"
 
-# Get current environment's pipeline details
+# Get staging pipeline details
 aws codepipeline get-pipeline \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1
+
+# Get production pipeline details
+aws codepipeline get-pipeline \
+  --name devops-mateocoll-website-prod \
+  --profile prod --region us-east-1
 ```
 
 ### Step 2: Monitor Pipeline Execution
 
+**Check current pipeline state:**
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-# Check current pipeline state
+# Staging pipeline
 aws codepipeline get-pipeline-state \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1
 
-# List recent executions
+# Production pipeline
+aws codepipeline get-pipeline-state \
+  --name devops-mateocoll-website-prod \
+  --profile prod --region us-east-1
+```
+
+**List recent executions:**
+```bash
+# Staging pipeline executions
 aws codepipeline list-pipeline-executions \
-  --pipeline-name devops-${REPO_NAME}-${ENVIRONMENT} \
+  --pipeline-name devops-mateocoll-website-staging \
   --max-items 10 \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --profile staging --region us-east-1
+
+# Production pipeline executions
+aws codepipeline list-pipeline-executions \
+  --pipeline-name devops-mateocoll-website-prod \
+  --max-items 10 \
+  --profile prod --region us-east-1
 ```
 
 ### Step 3: Check Stage-Specific Logs
 
+**Get execution details:**
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-# Get execution details
 aws codepipeline get-pipeline-execution \
-  --pipeline-name devops-${REPO_NAME}-${ENVIRONMENT} \
+  --pipeline-name devops-mateocoll-website-staging \
   --pipeline-execution-id <execution-id> \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --profile staging --region us-east-1
+```
 
-# Check action details (CloudFormation deploy action)
+**Check action details (CloudFormation deploy action):**
+```bash
+# Find CloudFormation action execution
 aws codepipeline list-action-executions \
-  --pipeline-name devops-${REPO_NAME}-${ENVIRONMENT} \
+  --pipeline-name devops-mateocoll-website-staging \
   --filter pipelineExecutionId=<execution-id> \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --profile staging --region us-east-1
 ```
 
 ### Step 4: Discover CloudFormation Stack Names from Pipeline
@@ -95,25 +80,18 @@ aws codepipeline list-action-executions \
 **Important:** CloudFormation stack names are configured in the pipeline stages. Do NOT assume stack names - discover them from the pipeline configuration.
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
 # Get pipeline configuration and extract CloudFormation stack names
+# Use --profile staging for staging, --profile prod for production
 aws codepipeline get-pipeline \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1 \
   --query 'pipeline.stages[*].actions[?actionTypeId.provider==`CloudFormation`].configuration' \
   --output json
 
-# Extract just the stack names
+# Extract just the stack names (use matching profile)
 aws codepipeline get-pipeline \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1 \
   --query 'pipeline.stages[*].actions[?actionTypeId.provider==`CloudFormation`].configuration.StackName' \
   --output table
 ```
@@ -123,58 +101,42 @@ aws codepipeline get-pipeline \
 After discovering stack names from the pipeline, monitor stack events:
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
-# Get the stack name from the pipeline
+# First, get the stack name from the pipeline (use matching profile)
+# For staging: --profile staging, for prod: --profile prod
 STACK_NAME=$(aws codepipeline get-pipeline \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1 \
   --query 'pipeline.stages[0].actions[?actionTypeId.provider==`CloudFormation`].configuration.StackName' \
   --output text)
 
-# Monitor that stack
+# Then monitor that stack (use same profile)
 aws cloudformation describe-stack-events \
   --stack-name $STACK_NAME \
   --max-items 50 \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --profile staging --region us-east-1
 ```
 
 ### Step 6: Monitor Pipeline Execution with CloudFormation Details
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
 # 1. Get pipeline execution status
 aws codepipeline get-pipeline-state \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1 \
   --query 'stageStates[*].[stageName,latestExecution.status]' \
   --output table
 
 # 2. For CloudFormation stages, get the action details
 aws codepipeline get-pipeline-state \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1 \
   --query 'stageStates[*].actionStates[?actionName==`DeployDB`].[actionName,latestExecution.status,latestExecution.errorDetails]' \
   --output json
 
 # 3. List all CloudFormation stacks deployed by the pipeline
 aws codepipeline get-pipeline \
-  --name devops-${REPO_NAME}-${ENVIRONMENT} \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --name devops-mateocoll-website-staging \
+  --profile staging --region us-east-1 \
   --query 'pipeline.stages[*].actions[?actionTypeId.provider==`CloudFormation`].[actionName,configuration.StackName]' \
   --output table
 ```
@@ -194,34 +156,25 @@ aws codepipeline get-pipeline \
 ### Troubleshooting Pipeline Failures
 
 ```bash
-# Set up AWS profile and region
-REPO_NAME=$(node -p "const name = require('./package.json').name; name.startsWith('@') ? name.split('/')[1] : name")
-ENVIRONMENT=$(git branch --show-current)
-AWS_PROFILE="${REPO_NAME}-${ENVIRONMENT}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-
 # 1. Get latest execution ID
 EXECUTION_ID=$(aws codepipeline list-pipeline-executions \
-  --pipeline-name devops-${REPO_NAME}-${ENVIRONMENT} \
+  --pipeline-name devops-mateocoll-website-staging \
   --max-items 1 \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --profile staging --region us-east-1 \
   --query 'pipelineExecutionSummaries[0].pipelineExecutionId' \
   --output text)
 
 # 2. Get detailed execution info
 aws codepipeline get-pipeline-execution \
-  --pipeline-name devops-${REPO_NAME}-${ENVIRONMENT} \
+  --pipeline-name devops-mateocoll-website-staging \
   --pipeline-execution-id $EXECUTION_ID \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION
+  --profile staging --region us-east-1
 
 # 3. List all actions for this execution
 aws codepipeline list-action-executions \
-  --pipeline-name devops-${REPO_NAME}-${ENVIRONMENT} \
+  --pipeline-name devops-mateocoll-website-staging \
   --filter pipelineExecutionId=$EXECUTION_ID \
-  --profile $AWS_PROFILE \
-  --region $AWS_REGION \
+  --profile staging --region us-east-1 \
   --query 'actionExecutionDetails[?status==`Failed`].[actionName,status,output.executionResult.externalExecutionSummary]' \
   --output table
 ```

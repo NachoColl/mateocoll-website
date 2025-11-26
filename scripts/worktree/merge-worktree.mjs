@@ -208,38 +208,6 @@ try {
         }
     }
 
-    // Fetch latest changes from origin to ensure parent branch is up to date
-    console.log(colorize('\n🔄 Fetching latest changes from origin...', 'cyan'));
-    try {
-        execCommand('git fetch origin');
-        console.log(colorize('✅ Fetched latest changes from origin', 'green'));
-
-        // Check if local parent branch is behind remote
-        const localCommit = execCommand(`git rev-parse ${currentBranch}`);
-        const remoteCommit = execCommand(`git rev-parse origin/${currentBranch}`, { ignoreError: true });
-
-        if (remoteCommit && localCommit !== remoteCommit) {
-            const behindCount = execCommand(`git rev-list --count ${currentBranch}..origin/${currentBranch}`);
-
-            if (behindCount !== '0') {
-                console.error(colorize(`\n❌ Error: Your local '${currentBranch}' branch is ${behindCount} commits behind origin/${currentBranch}`, 'red'));
-                console.error(colorize('   Someone else has pushed changes to the remote branch.', 'yellow'));
-                console.error(colorize('\n💡 To fix this, update your local branch first:', 'cyan'));
-                console.error(`   git pull origin ${currentBranch}`);
-                console.error(`   Then run the merge again:`);
-                console.error(`   npm run worktree:merge ${branchName}`);
-                process.exit(1);
-            }
-
-            const aheadCount = execCommand(`git rev-list --count origin/${currentBranch}..${currentBranch}`);
-            if (aheadCount !== '0') {
-                console.log(colorize(`ℹ️  Your local '${currentBranch}' branch is ${aheadCount} commits ahead of origin/${currentBranch}`, 'blue'));
-            }
-        }
-    } catch (error) {
-        console.log(colorize('⚠️  Could not fetch from origin (this is OK if working offline)', 'yellow'));
-    }
-
     // Check for uncommitted changes in parent branch
     const status = execCommand('git status --porcelain');
     if (status) {
@@ -287,6 +255,9 @@ Changes committed automatically to ensure they are included in the merge.`;
 
     // Check if branch is up to date with current branch
     console.log(colorize('\n🔍 Checking branch status...', 'yellow'));
+
+    // Note: We only work with local branches, no remote fetch needed
+    // User manually pushes to remote when ready
 
     // Check how many commits behind the worktree branch is
     const commitsBehind = execCommand(`git rev-list --count ${branchName}..${currentBranch}`);
