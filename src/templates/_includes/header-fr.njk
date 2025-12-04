@@ -7,11 +7,11 @@
         <li><a href="{{ '/fr/' | url }}" {% if page.url == "/fr/" %}class="active"{% endif %}>Travaux</a></li>
         <li><a href="{{ '/fr/contact/' | url }}" {% if page.url == "/fr/contact/" %}class="active"{% endif %}>Contact</a></li>
         <li class="lang-switcher-nav">
-          <a href="{{ page.url | replace('/fr/', '/') | replace('/fr', '/') }}" class="lang-link">ESP</a>
+          <a href="{{ (page.url | replace('/fr/', '/') | replace('/fr', '/')) | url }}" class="lang-link">ESP</a>
           <span class="lang-separator">/</span>
-          <a href="{{ page.url }}" class="lang-link active">FR</a>
+          <a href="{{ page.url | url }}" class="lang-link active">FR</a>
           <span class="lang-separator">/</span>
-          <a href="/en{{ page.url | replace('/fr/', '/') | replace('/fr', '/') }}" class="lang-link">EN</a>
+          <a href="{{ ('/en' + (page.url | replace('/fr/', '/') | replace('/fr', '/'))) | url }}" class="lang-link">EN</a>
         </li>
       </ul>
     </nav>

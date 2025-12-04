@@ -7,11 +7,11 @@
         <li><a href="{{ '/' | url }}" {% if page.url == "/" %}class="active"{% endif %}>Trabajos</a></li>
         <li><a href="{{ '/contact/' | url }}" {% if page.url == "/contact/" %}class="active"{% endif %}>Contacto</a></li>
         <li class="lang-switcher-nav">
-          <a href="{{ page.url }}" class="lang-link active">ESP</a>
+          <a href="{{ page.url | url }}" class="lang-link active">ESP</a>
           <span class="lang-separator">/</span>
-          <a href="/fr{{ page.url }}" class="lang-link">FR</a>
+          <a href="{{ ('/fr' + page.url) | url }}" class="lang-link">FR</a>
           <span class="lang-separator">/</span>
-          <a href="/en{{ page.url }}" class="lang-link">EN</a>
+          <a href="{{ ('/en' + page.url) | url }}" class="lang-link">EN</a>
         </li>
       </ul>
     </nav>
