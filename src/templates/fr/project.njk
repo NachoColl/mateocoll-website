@@ -9,7 +9,18 @@ bodyClass: project-page-v2
 lang: fr
 ---
 
+<<<<<<< HEAD
 <main class="renegada-project" data-project-slug="{{ project.slug }}" style="--project-bg-gif: url('{{ project.bgGif | url }}');">
+=======
+<main class="renegada-project" data-project-slug="{{ project.slug }}" {% if project.bgGif %}style="--project-bg-gif: url('{{ project.bgGif | url }}');"{% endif %}>
+
+  {# Background video (for projects with bgVideo instead of bgGif) #}
+  {% if project.bgVideo %}
+  <video class="project-bg-video" autoplay muted loop playsinline>
+    <source src="{{ project.bgVideo | url }}" type="video/mp4">
+  </video>
+  {% endif %}
+>>>>>>> website-v1
 
   {# 0. Landing Section - Title with full opacity GIF background #}
   <section class="renegada-landing">
