@@ -28,6 +28,106 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Home page background decorations */
+body.home-page {
+  background: var(--color-black);
+}
+
+/* Custom cursor for hero section */
+.custom-cursor {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: var(--color-white);
+  transform: translate(-50%, -50%);
+}
+
+.custom-cursor.visible {
+  opacity: 1;
+}
+
+.hero.custom-cursor-active {
+  cursor: none;
+}
+
+/* Container for blue blur circles */
+.home-bg-circles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Floating animation for circles */
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(15px, -20px); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, 15px); }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, 10px); }
+}
+
+@keyframes float4 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-10px, -15px); }
+}
+
+/* Blue diffused circles */
+.home-bg-circle {
+  display: none;
+}
+
+/* Circle 1: Top-left corner, cut to show 1/4 */
+.home-bg-circle:nth-child(1) {
+  width: 500px;
+  height: 500px;
+  top: -250px;
+  left: -250px;
+  animation: float1 12s ease-in-out infinite;
+}
+
+/* Circle 2: Right edge, partially visible */
+.home-bg-circle:nth-child(2) {
+  width: 350px;
+  height: 350px;
+  top: 30%;
+  right: -150px;
+  animation: float2 10s ease-in-out infinite;
+}
+
+/* Circle 3: Bottom area */
+.home-bg-circle:nth-child(3) {
+  width: 420px;
+  height: 420px;
+  bottom: 5%;
+  left: 55%;
+  animation: float3 14s ease-in-out infinite;
+}
+
+/* Circle 4: Smaller, random position */
+.home-bg-circle:nth-child(4) {
+  width: 280px;
+  height: 280px;
+  bottom: 35%;
+  left: 15%;
+  animation: float4 11s ease-in-out infinite;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -51,24 +151,45 @@ img, video, iframe {
 }
 
 /* Header */
+@keyframes headerSlideIn {
+  from {
+    opacity: 0;
+    top: -100px;
+  }
+  to {
+    opacity: 1;
+    top: 0;
+  }
+}
+
 .site-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 30px 0;
-  mix-blend-mode: difference;
+  padding: 20px 5%;
+  background: var(--color-black);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  animation: headerSlideIn 0.5s ease-out;
+  transform: translateY(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.site-header.header-hidden {
+  transform: translateY(-100%);
 }
 
 .site-header .container {
+  max-width: none;
+  padding: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
   letter-spacing: -0.02em;
   color: var(--color-white);
@@ -80,7 +201,7 @@ img, video, iframe {
 }
 
 .main-nav a {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: var(--color-white);
   opacity: 0.5;
@@ -94,11 +215,13 @@ img, video, iframe {
 
 /* Footer */
 .site-footer {
-  padding: 60px 0;
+  padding: 60px 5%;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .site-footer .container {
+  max-width: none;
+  padding: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -108,6 +231,8 @@ img, video, iframe {
 .site-footer .location {
   font-size: 14px;
   color: var(--color-gray);
+  margin: 0;
+  line-height: 1;
 }
 
 /* Hero */
@@ -115,6 +240,7 @@ img, video, iframe {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 120px 0 80px;
   position: relative;
 }
@@ -125,6 +251,53 @@ img, video, iframe {
   line-height: 1.1;
   letter-spacing: -0.03em;
   max-width: 1000px;
+  text-align: center;
+}
+
+/* Hero text entrance animation */
+@keyframes heroTextEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-name {
+  display: block;
+  font-size: 0.35em;
+  font-weight: 300;
+  margin-bottom: 0.8em;
+  opacity: 0;
+  animation: heroTextEnter 0.5s ease-out forwards;
+  animation-delay: 0.1s;
+}
+
+.hero-role {
+  display: block;
+  white-space: nowrap;
+  opacity: 0;
+  animation: heroTextEnter 0.5s ease-out forwards;
+}
+
+.role-label {
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.role-value {
+  font-weight: 300;
+}
+
+.hero-role:nth-of-type(2) {
+  animation-delay: 0.25s;
+}
+
+.hero-role:nth-of-type(3) {
+  animation-delay: 0.4s;
 }
 
 .hero-subtitle {
@@ -237,7 +410,8 @@ img, video, iframe {
   transition: transform 0.6s ease, opacity 0.4s ease;
 }
 
-.project-card .preview-video {
+.project-card .preview-video,
+.project-card .preview-gif {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -252,7 +426,8 @@ img, video, iframe {
   opacity: 0;
 }
 
-.project-card:hover .preview-video {
+.project-card:hover .preview-video,
+.project-card:hover .preview-gif {
   opacity: 1;
 }
 
@@ -269,7 +444,8 @@ img, video, iframe {
 }
 
 .project-page .site-header {
-  mix-blend-mode: normal;
+  background: var(--color-black);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .project-hero {
@@ -457,47 +633,75 @@ img, video, iframe {
 }
 
 /* Contact Page */
-.contact-content {
-  padding: 0 0 120px;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-}
-
-.contact-form {
+.contact-page {
+  min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  justify-content: center;
+  padding: 70px 0 10px;
+}
+
+.contact-page .container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 0 60px;
+  margin: 0 auto;
+}
+
+.contact-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 25px;
+  line-height: 1.2;
+}
+
+.contact-form-grid {
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.form-group label {
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-gray);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 16px 0;
+  padding: 12px 0;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   background: transparent;
   color: var(--color-white);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 15px;
   transition: border-color 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-group select {
+  color: rgba(255, 255, 255, 0.6);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-group select option {
+  background: var(--color-black);
+  color: var(--color-white);
 }
 
 .form-group input:focus,
@@ -507,69 +711,86 @@ img, video, iframe {
   border-color: var(--color-white);
 }
 
-.form-group select {
-  -webkit-appearance: none;
-  appearance: none;
+.form-group-full {
+  margin-bottom: 20px;
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 80px;
 }
 
-.btn-submit {
-  align-self: flex-start;
-  padding: 16px 40px;
-  background: var(--color-white);
-  color: var(--color-black);
+.btn-send {
+  background: none;
   border: none;
-  border-radius: 100px;
+  color: var(--color-white);
   font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  padding: 0;
   transition: opacity 0.3s ease;
 }
 
-.btn-submit:hover {
-  opacity: 0.8;
+.btn-send:hover {
+  opacity: 0.7;
 }
 
-.contact-info {
+.contact-footer {
+  padding-top: 20px;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.contact-label {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 20px;
+}
+
+.contact-details {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 8px;
 }
 
-.info-item .label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-gray);
-  margin-bottom: 12px;
+.contact-phone {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 600;
 }
 
-.info-item .value {
-  font-size: 18px;
-}
-
-.social-links {
-  display: flex;
-  gap: 30px;
-  margin-top: 40px;
-}
-
-.social-links a {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--color-gray);
-  transition: color 0.3s ease;
-}
-
-.social-links a:hover {
+.contact-email {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 600;
   color: var(--color-white);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.contact-email:hover {
+  opacity: 0.7;
+}
+
+/* Contact Page Entrance Animations */
+@keyframes contactFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-animate {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.contact-animate.animate-in {
+  animation: contactFadeInUp 0.6s ease-out forwards;
 }
 
 /* Responsive */
@@ -592,9 +813,9 @@ img, video, iframe {
     grid-template-columns: 1fr;
   }
 
-  .contact-grid {
+  .form-row {
     grid-template-columns: 1fr;
-    gap: 60px;
+    gap: 20px;
   }
 }
 
@@ -612,4 +833,796 @@ img, video, iframe {
     gap: 10px;
     text-align: center;
   }
+}
+
+/* ========================================
+   PROJECT PAGE V2 - Scena-inspired Design
+   ======================================== */
+
+.project-page-v2 {
+  background: var(--color-black);
+}
+
+.project-page-v2 .site-header {
+  background: transparent;
+  border-bottom: none;
+}
+
+/* Scena Project Layout */
+.scena-project {
+  background: var(--color-black);
+  padding-top: 100px;
+}
+
+/* Video Section - Red Background */
+.scena-video-section {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+  background: var(--color-black);
+}
+
+.scena-video-container {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 16/9;
+  background: #e63946;
+  position: relative;
+}
+
+.scena-video-container iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+
+/* Text Sections */
+.scena-text {
+  padding: 80px 60px;
+  text-align: center;
+  background: var(--color-black);
+}
+
+.scena-text p {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 600;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+  color: var(--color-white);
+}
+
+/* Gallery Section */
+.scena-gallery {
+  background: var(--color-black);
+  padding: 20px 0;
+}
+
+.scena-gallery-item {
+  padding: 40px 60px;
+}
+
+.scena-gallery-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Gallery Positions */
+.scena-right {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 15%;
+}
+
+.scena-right img {
+  width: 55%;
+  max-width: 600px;
+}
+
+.scena-left {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 10%;
+}
+
+.scena-left img {
+  width: 50%;
+  max-width: 550px;
+}
+
+.scena-center {
+  display: flex;
+  justify-content: center;
+}
+
+.scena-center img {
+  width: 50%;
+  max-width: 550px;
+}
+
+/* Credits Section - Red Background */
+.scena-credits {
+  position: relative;
+  background: #e63946;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 60px;
+  margin-top: 60px;
+}
+
+.scena-credits-image {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 10;
+}
+
+.scena-credits-image img {
+  max-height: 350px;
+  width: auto;
+}
+
+.scena-credits-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding-top: 120px;
+}
+
+.scena-credits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scena-credit-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.scena-credit-row dt {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 400;
+}
+
+.scena-credit-row dt::after {
+  content: ":";
+}
+
+.scena-credit-row dd {
+  color: var(--color-black);
+  font-weight: 500;
+}
+
+/* Back Navigation */
+.scena-nav {
+  padding: 80px 60px;
+  text-align: center;
+  background: var(--color-black);
+}
+
+.scena-nav-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-gray);
+  margin-bottom: 12px;
+}
+
+.scena-nav-link {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-white);
+  transition: opacity 0.3s ease;
+}
+
+.scena-nav-link:hover {
+  opacity: 0.7;
+}
+
+/* Responsive for Scena Project */
+@media (max-width: 1024px) {
+  .scena-video-section,
+  .scena-text,
+  .scena-gallery-item,
+  .scena-nav {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .scena-right {
+    padding-right: 10%;
+  }
+
+  .scena-left {
+    padding-left: 5%;
+  }
+
+  .scena-right img,
+  .scena-left img {
+    width: 65%;
+  }
+
+  .scena-center img {
+    width: 60%;
+  }
+}
+
+@media (max-width: 768px) {
+  .scena-project {
+    padding-top: 80px;
+  }
+
+  .scena-video-section,
+  .scena-text,
+  .scena-gallery-item,
+  .scena-nav {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .scena-right,
+  .scena-left {
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: center;
+  }
+
+  .scena-right img,
+  .scena-left img,
+  .scena-center img {
+    width: 100%;
+    max-width: none;
+  }
+
+  .scena-credits {
+    min-height: 350px;
+    padding-bottom: 40px;
+  }
+
+  .scena-credits-image img {
+    max-height: 220px;
+  }
+
+  .scena-credits-content {
+    padding-top: 80px;
+  }
+}
+
+/* ========================================
+   RENEGADA PROJECT PAGE - Cinematic Design
+   ======================================== */
+
+:root {
+  --renegada-red: #ff0a0a;
+  --renegada-red-dark: #cc0000;
+}
+
+.renegada-project {
+  background: var(--color-black);
+  position: relative;
+  --gif-opacity: 1;
+}
+
+/* Fade-in animation for background GIF */
+@keyframes gifFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--gif-opacity, 1);
+  }
+}
+
+/* Fixed background GIF with dynamic opacity */
+.renegada-project::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--project-bg-gif) center center / cover no-repeat;
+  opacity: var(--gif-opacity);
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease-out;
+  animation: gifFadeIn 1.2s ease-out forwards;
+}
+
+/* Fixed background VIDEO with dynamic opacity (same behavior as GIF) */
+.project-bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--gif-opacity, 1);
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease-out;
+  animation: gifFadeIn 1.2s ease-out forwards;
+}
+
+/* Fixed background image for fullwidth window effect - lower z-index than GIF */
+.renegada-project::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/projects/sintetico-fullwidth.jpg') center center / cover no-repeat;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Ensure all content is above the background (except video which stays behind) */
+.renegada-project > *:not(.project-bg-video) {
+  position: relative;
+  z-index: 1;
+}
+
+/* 0. Landing Section - Full screen with title */
+.renegada-landing {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 5% 8%;
+  background: transparent;
+}
+
+.renegada-landing-title {
+  font-size: clamp(80px, 15vw, 200px);
+  font-weight: 700;
+  color: var(--color-white);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  text-transform: uppercase;
+  animation: fadeInTitle 1.5s ease-out forwards;
+}
+
+@keyframes fadeInTitle {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll-triggered animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered delays for gallery items */
+.scroll-reveal.delay-1 { transition-delay: 0.1s; }
+.scroll-reveal.delay-2 { transition-delay: 0.2s; }
+.scroll-reveal.delay-3 { transition-delay: 0.3s; }
+
+/* 1. Hero Section */
+.renegada-hero {
+  background: transparent;
+  min-height: 100vh;
+  padding: 120px 60px 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Fade-in animation for video frame */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.renegada-hero-frame {
+  position: relative;
+  z-index: 1;
+  width: 85%;
+  max-width: none;
+  aspect-ratio: 16/9;
+  background: var(--color-black);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.renegada-hero-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* 2. Description Section */
+.renegada-description {
+  background: transparent;
+  padding: 20px 60px 80px;
+  text-align: center;
+}
+
+.renegada-description p {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.4;
+  max-width: 900px;
+  margin: 0 auto;
+  color: var(--color-white);
+  letter-spacing: 0.01em;
+}
+
+.renegada-description .desc-label {
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.renegada-description .desc-value {
+  color: var(--color-white);
+  font-weight: 300;
+}
+
+/* 3. Gallery Section - Alternating positions */
+.renegada-gallery {
+  background: transparent;
+  padding: 20px 0 60px;
+}
+
+.renegada-gallery-item {
+  padding: 30px 60px;
+}
+
+.renegada-gallery-item img {
+  height: auto;
+  display: block;
+}
+
+/* Gallery Positions */
+.renegada-pos-center {
+  display: flex;
+  justify-content: center;
+}
+
+.renegada-pos-center img {
+  width: 85%;
+  max-width: 1200px;
+}
+
+.renegada-pos-left {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 12%;
+}
+
+.renegada-pos-left img {
+  width: 80%;
+  max-width: 1200px;
+}
+
+.renegada-pos-right {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 12%;
+}
+
+.renegada-pos-right img {
+  width: 80%;
+  max-width: 1200px;
+}
+
+/* Black cover to transition from GIF area to fullwidth window */
+.renegada-gif-cover {
+  background: var(--color-black);
+  height: 700px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Credits section - over the GIF background, before the black cover */
+.renegada-credits-overlay {
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+.renegada-credits-overlay .renegada-credit-line {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-white);
+  margin: 6px 0;
+  letter-spacing: 0.02em;
+}
+
+.renegada-credits-overlay .credit-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 4. Full Width Image Section - Window effect to see fixed background */
+.renegada-fullwidth {
+  width: 100%;
+  height: 100px;
+  position: relative;
+  z-index: 2;
+  /* No background - transparent to show the fixed image behind */
+}
+
+.renegada-fullwidth img {
+  display: none;
+}
+
+/* 5. Thanks Section */
+.renegada-thanks {
+  background: var(--color-black);
+  padding: 60px 60px 80px;
+  text-align: center;
+}
+
+.renegada-thanks p {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  max-width: 550px;
+  margin: 0 auto;
+  color: var(--color-white);
+  letter-spacing: 0.01em;
+}
+
+/* 6. Footer Section - Transparent to show GIF background */
+.renegada-footer {
+  background: transparent;
+  padding: 60px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+/* Silhouette image extending from black section above */
+.renegada-footer-silhouette {
+  position: relative;
+  z-index: 1;
+  margin-top: -180px;
+  margin-bottom: 40px;
+}
+
+.renegada-footer-silhouette img {
+  max-height: 350px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+/* Credits */
+.renegada-footer-credits {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 50px;
+}
+
+.renegada-credit-line {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-white);
+  margin: 4px 0;
+  letter-spacing: 0.02em;
+}
+
+.renegada-credit-line .credit-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Back Section */
+.renegada-back-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.renegada-back-label {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.renegada-back-link {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-white);
+  letter-spacing: -0.02em;
+  transition: opacity 0.3s ease;
+}
+
+.renegada-back-link:hover {
+  opacity: 0.8;
+}
+
+/* 7. Bottom Footer */
+.renegada-bottom-footer {
+  background: transparent;
+  padding: 30px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.renegada-bottom-footer .copyright,
+.renegada-bottom-footer .location {
+  font-size: 13px;
+  color: var(--color-gray);
+  font-weight: 400;
+}
+
+/* Responsive for Renegada Project */
+@media (max-width: 1024px) {
+  .renegada-hero {
+    padding: 30px 40px 50px;
+  }
+
+  .renegada-description,
+  .renegada-thanks {
+    padding: 50px 40px 60px;
+  }
+
+  .renegada-gallery-item {
+    padding: 25px 40px;
+  }
+
+  .renegada-pos-left {
+    padding-left: 5%;
+  }
+
+  .renegada-pos-right {
+    padding-right: 5%;
+  }
+
+  .renegada-pos-center img,
+  .renegada-pos-left img,
+  .renegada-pos-right img {
+    width: 60%;
+  }
+
+  .renegada-footer {
+    padding: 0 40px 50px;
+  }
+
+  .renegada-bottom-footer {
+    padding: 25px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .renegada-hero {
+    padding: 20px 20px 40px;
+  }
+
+  .renegada-hero-frame {
+    max-width: 100%;
+  }
+
+  .renegada-description,
+  .renegada-thanks {
+    padding: 40px 20px 50px;
+  }
+
+  .renegada-description p,
+  .renegada-thanks p {
+    font-size: 14px;
+  }
+
+  .renegada-gallery-item {
+    padding: 20px;
+  }
+
+  .renegada-pos-center,
+  .renegada-pos-left,
+  .renegada-pos-right {
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: center;
+  }
+
+  .renegada-pos-center img,
+  .renegada-pos-left img,
+  .renegada-pos-right img {
+    width: 100%;
+    max-width: none;
+  }
+
+  .renegada-footer {
+    padding: 0 20px 40px;
+  }
+
+  .renegada-footer-silhouette {
+    margin-top: -120px;
+  }
+
+  .renegada-footer-silhouette img {
+    max-height: 250px;
+    max-width: 150px;
+  }
+
+  .renegada-back-link {
+    font-size: 26px;
+  }
+
+  .renegada-bottom-footer {
+    padding: 20px;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
+
+/* Language Switcher in Navigation */
+.lang-switcher-nav {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.lang-link {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-white);
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  text-decoration: none;
+}
+
+.lang-link:hover {
+  opacity: 0.8;
+}
+
+.lang-link.active {
+  opacity: 1;
+}
+
+.lang-separator {
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0 6px;
+  font-size: 14px;
 }

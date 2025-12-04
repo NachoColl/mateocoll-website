@@ -1,5 +1,5 @@
-// Video Preview Manager for Work Grid
-class VideoPreviewManager {
+// Video/GIF Preview Manager for Work Grid
+class PreviewManager {
   constructor() {
     this.cards = document.querySelectorAll('.project-card');
     this.currentVideo = null;
@@ -8,18 +8,21 @@ class VideoPreviewManager {
   init() {
     this.cards.forEach(card => {
       const video = card.querySelector('.preview-video');
-      if (!video) return;
+      const gif = card.querySelector('.preview-gif');
 
-      card.addEventListener('mouseenter', () => {
-        if (this.currentVideo && this.currentVideo !== video) {
-          this.stopVideo(this.currentVideo);
-        }
-        this.playVideo(video);
-      });
+      if (video) {
+        card.addEventListener('mouseenter', () => {
+          if (this.currentVideo && this.currentVideo !== video) {
+            this.stopVideo(this.currentVideo);
+          }
+          this.playVideo(video);
+        });
 
-      card.addEventListener('mouseleave', () => {
-        this.stopVideo(video);
-      });
+        card.addEventListener('mouseleave', () => {
+          this.stopVideo(video);
+        });
+      }
+
     });
   }
 
@@ -33,9 +36,10 @@ class VideoPreviewManager {
     video.pause();
     video.currentTime = 0;
   }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const manager = new VideoPreviewManager();
+  const manager = new PreviewManager();
   manager.init();
 });
