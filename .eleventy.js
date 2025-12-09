@@ -2,6 +2,9 @@ module.exports = function(eleventyConfig) {
   // Pass through assets - copy src/assets to _site/assets
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
+  // Copy CNAME file for custom domain
+  eleventyConfig.addPassthroughCopy("CNAME");
+
   // Watch for changes
   eleventyConfig.addWatchTarget("src/assets/");
 
