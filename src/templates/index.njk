@@ -14,7 +14,7 @@ bodyClass: home-page
 <!-- Custom cursor with down arrow -->
 <div class="custom-cursor" id="customCursor">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </div>
 
@@ -29,7 +29,7 @@ bodyClass: home-page
 
   <a href="#projects" class="scroll-indicator" aria-label="Scroll down">
     <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2L12 28M12 28L6 22M12 28L18 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 2L12 28M12 28L6 22M12 28L18 22" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </a>
 </section>
@@ -40,32 +40,49 @@ bodyClass: home-page
       <button class="filter-btn active" data-category="all">Todos</button>
       <span class="filter-separator">|</span>
       <button class="filter-btn" data-category="cortometrajes">Cortometrajes</button>
+      <span class="filter-separator">|</span>
+      <button class="filter-btn" data-category="practicas">Prácticas</button>
     </nav>
 
-    <div class="projects-grid">
-      {% for project in projects.projects %}
-      <article class="project-card" data-project="{{ project.slug }}" data-category="{{ project.category }}">
-        <a href="{{ ('/project/' + project.slug + '/') | url }}">
-          <div class="media-container">
-            <img class="thumbnail" src="{{ project.thumbnail | url }}" alt="{{ project.title }}" loading="lazy">
-            {% if project.previewGif %}
-            <img class="preview-gif" src="{{ project.previewGif | url }}" alt="{{ project.title }} preview" loading="eager">
-            {% elif project.previewVideo %}
-            <video class="preview-video" muted loop playsinline preload="none">
-              <source src="{{ project.previewVideo | url }}" type="video/mp4">
-            </video>
-            {% endif %}
-          </div>
-          <h3 class="project-title">{{ project.title }}</h3>
-        </a>
-      </article>
-      {% endfor %}
+    <div class="projects-carousel-wrapper">
+      <button class="carousel-arrow prev" id="carouselPrev" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 6L9 12L15 18" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+        </svg>
+      </button>
+
+      <div class="projects-grid" id="projectsCarousel">
+        {% for project in projects.projects %}
+        <article class="project-card" data-project="{{ project.slug }}" data-category="{{ project.category }}">
+          <a href="{{ ('/project/' + project.slug + '/') | url }}">
+            <div class="media-container">
+              <img class="thumbnail" src="{{ project.thumbnail | url }}" alt="{{ project.title }}" loading="lazy">
+              {% if project.previewGif %}
+              <img class="preview-gif" src="{{ project.previewGif | url }}" alt="{{ project.title }} preview" loading="eager">
+              {% elif project.previewVideo %}
+              <video class="preview-video" muted loop playsinline preload="none">
+                <source src="{{ project.previewVideo | url }}" type="video/mp4">
+              </video>
+              {% endif %}
+            </div>
+            <h3 class="project-title">{{ project.title }}</h3>
+          </a>
+        </article>
+        {% endfor %}
+      </div>
+
+      <button class="carousel-arrow next" id="carouselNext" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 6L15 12L9 18" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+        </svg>
+      </button>
     </div>
   </div>
 </section>
 
 <script src="{{ '/assets/js/category-filter.js' | url }}"></script>
 <script src="{{ '/assets/js/video-preview.js' | url }}"></script>
+<script src="{{ '/assets/js/carousel.js' | url }}"></script>
 
 <script>
   // Custom cursor for hero section

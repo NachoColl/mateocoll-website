@@ -23,6 +23,16 @@ class PreviewManager {
         });
       }
 
+      if (gif) {
+        card.addEventListener('mouseenter', () => {
+          this.resetGif(gif);
+        });
+
+        card.addEventListener('mouseleave', () => {
+          this.resetGif(gif);
+        });
+      }
+
     });
   }
 
@@ -35,6 +45,12 @@ class PreviewManager {
   stopVideo(video) {
     video.pause();
     video.currentTime = 0;
+  }
+
+  resetGif(gif) {
+    const src = gif.src;
+    gif.src = '';
+    gif.src = src;
   }
 
 }

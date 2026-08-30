@@ -350,6 +350,11 @@ img, video, iframe {
   padding: 0 0 200px;
 }
 
+.work-grid .container {
+  max-width: 1600px;
+  padding: 0 40px;
+}
+
 /* Category Filters */
 .category-filters {
   display: flex;
@@ -382,14 +387,82 @@ img, video, iframe {
   font-size: 16px;
 }
 
+/* Projects Carousel */
+.projects-carousel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 20px;
+}
+
+.projects-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .project-card {
+  flex: 0 0 480px;
   position: relative;
+}
+
+/* Carousel Navigation Arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.carousel-arrow:hover {
+  opacity: 0.7;
+}
+
+.carousel-arrow svg {
+  width: 28px;
+  height: 28px;
+}
+
+.carousel-arrow svg path {
+  stroke: #fff !important;
+}
+
+.carousel-arrow.prev {
+  left: -70px;
+}
+
+.carousel-arrow.next {
+  right: -70px;
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 1400px) {
+  .carousel-arrow.prev {
+    left: 10px;
+  }
+  .carousel-arrow.next {
+    right: 10px;
+  }
 }
 
 .project-card a {
@@ -1233,6 +1306,11 @@ img, video, iframe {
   line-height: 0.9;
   text-transform: uppercase;
   animation: fadeInTitle 1.5s ease-out forwards;
+}
+
+.renegada-project[data-project-slug="prisionero"] .renegada-landing-title {
+  font-size: clamp(24px, 5vw, 70px);
+  white-space: nowrap;
 }
 
 @keyframes fadeInTitle {

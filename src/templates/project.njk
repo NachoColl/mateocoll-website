@@ -33,6 +33,14 @@ bodyClass: project-page-v2
           allowfullscreen
           title="{{ project.title }}">
         </iframe>
+      {% elif project.youtubeId %}
+        <iframe
+          src="https://www.youtube.com/embed/{{ project.youtubeId }}?rel=0&modestbranding=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="{{ project.title }}">
+        </iframe>
       {% endif %}
     </div>
   </section>

@@ -1,6 +1,37 @@
 {
   "projects": [
     {
+      "slug": "rio-abajo",
+      "title": "Río Abajo",
+      "description": "<span class=\"desc-label\">Rôle :</span> <span class=\"desc-value\">Réalisateur, monteur, concepteur sonore</span>",
+      "thumbnail": "/assets/images/projects/rio-abajo.jpg",
+      "heroImage": "/assets/images/projects/rio-abajo.jpg",
+      "previewVideo": "/assets/images/projects/rio-abajo-preview.mp4",
+      "bgVideo": "/assets/images/projects/rio-abajo-preview.mp4",
+      "vimeoId": "1222512043",
+      "category": "courts-metrages",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/images/projects/rio-abajo-gallery-1.jpg",
+          "position": "right"
+        },
+        {
+          "type": "image",
+          "src": "/assets/images/projects/rio-abajo-gallery-2.jpg",
+          "position": "left"
+        },
+        {
+          "type": "image",
+          "src": "/assets/images/projects/rio-abajo-gallery-3.jpg",
+          "position": "right"
+        }
+      ],
+      "metadata": [
+        { "label": "Rôle", "value": "Réalisateur, monteur, concepteur sonore" }
+      ]
+    },
+    {
       "slug": "duelo",
       "title": "Sintético",
       "description": "<span class=\"desc-label\">Rôle :</span> <span class=\"desc-value\">Monteur, concepteur sonore, réalisateur</span>",
@@ -31,6 +62,37 @@
       "creditsImage": "/assets/images/projects/duelo-credits.png",
       "metadata": [
         { "label": "Rôle", "value": "Monteur, réalisateur" }
+      ]
+    },
+    {
+      "slug": "prisionero",
+      "title": "Un prisonnier s'est échappé",
+      "description": "<span class=\"desc-label\">Rôle :</span> <span class=\"desc-value\">Monteur, concepteur sonore</span>",
+      "thumbnail": "/assets/images/projects/prisionero.jpg",
+      "heroImage": "/assets/images/projects/prisionero.jpg",
+      "previewVideo": "/assets/images/projects/prisionero-preview.mp4",
+      "bgVideo": "/assets/images/projects/prisionero-preview.mp4",
+      "youtubeId": "llWQNXPrpf4",
+      "category": "stages",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/images/projects/prisionero-gallery-1.jpg",
+          "position": "right"
+        },
+        {
+          "type": "image",
+          "src": "/assets/images/projects/prisionero-gallery-2.jpg",
+          "position": "left"
+        },
+        {
+          "type": "image",
+          "src": "/assets/images/projects/prisionero-gallery-3.jpg",
+          "position": "right"
+        }
+      ],
+      "metadata": [
+        { "label": "Rôle", "value": "Monteur, concepteur sonore" }
       ]
     },
     {

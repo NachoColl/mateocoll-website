@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#000"/>
+  <!-- 3D M with horizontal axis rotation (perspective) -->
+  <g transform="translate(16,18)">
+    <!-- Depth/extrusion layers (back to front) -->
+    <polygon points="-9,8 -9,-6 -5,-4 -5,5" fill="#444"/>
+    <polygon points="9,8 9,-6 5,-4 5,5" fill="#444"/>
+    <polygon points="-5,-4 0,2 5,-4 5,5 0,8 -5,5" fill="#555"/>
+    <!-- Top face (the visible M surface) -->
+    <polygon points="-10,6 -10,-8 -6,-10 -2,-2 0,-6 2,-2 6,-10 10,-8 10,6 6,4 6,-2 2,4 0,2 -2,4 -6,-2 -6,4" fill="#fff"/>
+  </g>
+</svg>
