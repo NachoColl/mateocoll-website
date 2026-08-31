@@ -300,6 +300,10 @@ img, video, iframe {
   animation-delay: 0.4s;
 }
 
+.hero-role:nth-of-type(4) {
+  animation-delay: 0.55s;
+}
+
 .hero-subtitle {
   font-size: 18px;
   color: var(--color-gray);
